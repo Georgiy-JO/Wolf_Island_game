@@ -155,7 +155,6 @@ public class Game
     {
         Stack<(uint x, uint y)> positions = new(CreatePositions(_data.Width, _data.Height)?.GetShuffledCollections() ?? Array.Empty<(uint x, uint y)>());
 
-        var animalList = _factory.GetPossibleIDs();
         foreach (var id in idAmoutRegistry)
         {
             for (uint i = 0; i < id.Value; i++)
@@ -179,10 +178,9 @@ public class Game
 
     protected static List<(uint x, uint y)> CreatePositions(uint fieldWidth, uint fieldHeight)
     {
-        uint positionsAmount = fieldWidth * fieldHeight;
+        ulong positionsAmount = fieldWidth * fieldHeight;
         if(positionsAmount> int.MaxValue)   throw new ArgumentOutOfRangeException("Field is too large for List capacity");
         var positions = new List<(uint x, uint y)>((int)positionsAmount);
-        if(fieldWidth>int.MaxValue)
         for (uint x = 0; x < fieldWidth; x++)
             for (uint y = 0; y < fieldHeight; y++)
                 positions.Add((x, y));

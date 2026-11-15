@@ -13,16 +13,23 @@ namespace Wolf_Island.App
 
             TUIGameRender gameUI;
             Game game;
-            (gameUI, game) = SetupAndStart();
-
-
-            uint frames = 2000;
-            while (true)
+            try
             {
-                game.Tick();
-                gameUI.Render(game.GetObjectStyleGameSnapshot());
+                (gameUI, game) = SetupAndStart();
 
-                Thread.Sleep((int)frames);
+
+                uint frames = 2000;
+                while (true)
+                {
+                    game.Tick();
+                    gameUI.Render(game.GetObjectStyleGameSnapshot());
+
+                    Thread.Sleep((int)frames);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 
@@ -30,16 +37,16 @@ namespace Wolf_Island.App
         {
             uint width;
             uint height;
-            //do
-            //{
-            //    Console.Write("Input field Width: ");
-            //} while (!uint.TryParse(Console.ReadLine(), out width));
-            //do
-            //{
-            //    Console.Write("Input field Height: ");
-            //} while (!uint.TryParse(Console.ReadLine(), out height));
-            width = 20;
-            height = 20;
+            do
+            {
+                Console.Write("Input field Width: ");
+            } while (!uint.TryParse(Console.ReadLine(), out width));
+            do
+            {
+                Console.Write("Input field Height: ");
+            } while (!uint.TryParse(Console.ReadLine(), out height));
+            //width = 20;
+            //height = 20;
 
             string configsPath = Path.Combine(AppContext.BaseDirectory, "Configs");
 
@@ -55,16 +62,19 @@ namespace Wolf_Island.App
 
             foreach (var key in amounts.Keys.ToList())
             {
-                //uint value;
-                //do
-                //{
-                //    Console.Write($"Input field {key} amount: ");
-                //} while (!uint.TryParse(Console.ReadLine(), out value));
-                //amounts[key] = value;
                 if (key != "Remains")
-                    amounts[key] = 5;
+                {
+                    uint value;
+                    do
+                    {
+                        Console.Write($"Input field {key} amount: ");
+                    } while (!uint.TryParse(Console.ReadLine(), out value));
+                    amounts[key] = value;
+                    //    amounts[key] = 5;
+                }
             }
             game.Start(amounts);
+            gameUI.Clear();
 
             return (gameUI, game);
 
