@@ -14,8 +14,8 @@ public readonly struct ObjectStyleGameSnapshot
 
     public ObjectStyleGameSnapshot(uint width, uint height, List<EntitySnapshot> entities)
     {
-        Width = width; 
-        Height = height; 
+        Width = width;
+        Height = height;
         Entities = entities;
     }
 }
@@ -28,8 +28,8 @@ public readonly struct ListStyleGameSnapshot
 
     public ListStyleGameSnapshot(uint width, uint height, IReadOnlyDictionary<string, List<(uint x, uint y)>> coordRegistry)
     {
-        Width = width; 
-        Height = height; 
+        Width = width;
+        Height = height;
         CoordListRegistry = coordRegistry;
     }
 }

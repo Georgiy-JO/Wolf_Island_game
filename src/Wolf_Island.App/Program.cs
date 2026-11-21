@@ -1,7 +1,7 @@
 using Microsoft.Win32;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using  Wolf_Island.Core;
+using Wolf_Island.Core;
 using Wolf_Island.App.View.TUI;
 
 namespace Wolf_Island.App
@@ -18,12 +18,10 @@ namespace Wolf_Island.App
                 (gameUI, game) = SetupAndStart();
 
 
-                uint frames = 2000;
+                uint frames = 1000;
                 while (true)
                 {
-                    game.Tick();
                     gameUI.Render(game.GetObjectStyleGameSnapshot());
-
                     Thread.Sleep((int)frames);
                 }
             }
@@ -45,8 +43,8 @@ namespace Wolf_Island.App
             {
                 Console.Write("Input field Height: ");
             } while (!uint.TryParse(Console.ReadLine(), out height));
-            //width = 20;
-            //height = 20;
+            //width = 20;  // default 
+            //height = 20; // default 
 
             string configsPath = Path.Combine(AppContext.BaseDirectory, "Configs");
 
@@ -70,8 +68,9 @@ namespace Wolf_Island.App
                         Console.Write($"Input field {key} amount: ");
                     } while (!uint.TryParse(Console.ReadLine(), out value));
                     amounts[key] = value;
-                    //    amounts[key] = 5;
+                    //amounts[key] = 5;
                 }
+
             }
             game.Start(amounts);
             gameUI.Clear();

@@ -25,7 +25,7 @@ namespace Wolf_Island.Core.Entities.Objects.FoodKinds
             ushort placed = 2;
             foreach (var pp in possiblePlacing)
             {
-                (long x, long y) coords = Game.GetCoords(pp, this.Coord);
+                (long x, long y) coords = Game.GetCoordsAround(pp, this.Coord);
                 bool flag = true;
 
                 if (coords.y < 0 || coords.x < 0 || coords.y >= data.Height || coords.x >= data.Width) flag = false;

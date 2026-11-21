@@ -8,7 +8,7 @@ namespace Wolf_Island.Core.Entities.Animals
         /// Creats a rabbit.
         /// </summary>
         /// <param name="coordinates">Spawn location.</param>
-        public Rabbit(AnimalData data, (uint x, uint y) coordinates = default) : base(data,  coordinates)
+        public Rabbit(AnimalData data, (uint x, uint y) coordinates = default) : base(data, coordinates)
         { }
 
     }

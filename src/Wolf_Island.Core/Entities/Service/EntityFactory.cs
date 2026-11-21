@@ -36,7 +36,7 @@ namespace Wolf_Island.Core.Entities.Service
                 //if (constructor is null)
                 //    throw new InvalidOperationException(
                 //        $"{type.Name} must have constructor ({typeof(TData).Name}, (uint, uint))");
-                if(constructor is not null)
+                if (constructor is not null)
                     dict[type.Name] = type;
             }
 

@@ -5,7 +5,7 @@ using Wolf_Island.Core.Extensions;
 
 namespace Wolf_Island.Core.Entities.Animals;
 
-internal abstract class Animal: Entity
+internal abstract class Animal : Entity
 {
     public enum Sizes
     {
@@ -129,10 +129,12 @@ internal abstract class Animal: Entity
         for (int i = 0; i < MoveDistance; i++)
         {
             ((long x, long y), int weight) theMove = (Coord, -(int)WeightField.weightDelta);       // issue#Movehandler_0: if the field size comes close to max int and FieldOfView comes close to global we are fucked
-            var possibleMoves = Enum.GetValues<Game.Direction>().Select(dir => Game.GetCoords(dir, Coord)).ToArray().GetShuffledCollections();
+            var possibleMoves = Enum.GetValues<Game.Direction>().Select(dir => Game.GetCoordsAround(dir, Coord)).ToArray().GetShuffledCollections();
             foreach (var possibleMove in possibleMoves)
             {
-                if (theMove.weight < weightField[possibleMove] && (possibleMove.x > 0 && possibleMove.x < data.Width && possibleMove.y > 0 && possibleMove.y < data.Height))       // (possibleMove.x >= 0 && possibleMove.y >= 0 && possibleMove.x < data.Width && possibleMove.y < data.Height)
+                if (theMove.weight < weightField[possibleMove] &&
+                   (possibleMove.x > 0 && possibleMove.x < data.Width &&
+                   possibleMove.y > 0 && possibleMove.y < data.Height))
                     theMove = (possibleMove, (int)weightField[possibleMove]);                   // issue#Movehandler_0
             }
             SetCoord((uint)theMove.Item1.x, (uint)theMove.Item1.y);
