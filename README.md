@@ -12,9 +12,8 @@ You can set the amount of each and the field size at the beginning of the game a
 
 
 ## Notes for future
-1. Eating patterns (wolfs doesn't eat sometimes) -- might be something with the WeightField.
-2. Add multiplication of animals
-3. optional changes:
+1. Eating patterns (wolfs doesn't eat sometimes) -- might be something with the WeightField (or there might be no issues - testing is required).
+2. optional changes:
    1. make view field global for animals (require rework of the game structure, for example weight field will have to be global as well).
    2. make possible position matrix for all the animals and food
 
