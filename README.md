@@ -10,11 +10,12 @@ You can set the amount of each and the field size at the beginning of the game a
 - Some bags can still remain ([Notes](#notes-for-future)), I will fix those when I have time probably.
 - The project supports the MVC pattern so all the logic is inside the `Wolf_Island.Core` folder, while `Wolf_Island.App` folder contains GUI and a simple `Program.cs`.
 
+## Version notes
+This is the version where animals can multiply any time they are near each other, that freaks up the game, by looks fun.
 
 ## Notes for future
-1. Eating patterns (wolfs doesn't eat sometimes) -- might be something with the WeightField.
-2. Add multiplication of animals
-3. optional changes:
+1. Eating patterns (wolfs doesn't eat sometimes) -- might be something with the WeightField (or everything may be fine, and it's just me).
+2. optional changes:
    1. make view field global for animals (require rework of the game structure, for example weight field will have to be global as well).
    2. make possible position matrix for all the animals and food
 
