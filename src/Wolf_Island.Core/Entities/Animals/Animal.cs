@@ -19,12 +19,14 @@ internal abstract class Animal : Entity
     public uint MeatValue { private set; get; }
     private readonly uint MaxHungerTimer;
     private readonly uint MaxLifelossTimer;
+    private readonly uint MaxMultiplicationTimer;
     public Sizes Size { get; }
 
     protected uint _health;
     protected uint _fullness;
     private uint _hungerTimer;
     private uint _lifelossTimer;
+    private uint _multiplicationTimer;
 
     public bool IsAlive => _health > 0;
     public void Kill() => _health = 0;
@@ -45,9 +47,11 @@ internal abstract class Animal : Entity
         FieldOfView = dat.FieldOfView;
         MaxHungerTimer = dat.HungerTimer;
         MaxLifelossTimer = dat.LifelossTimer;
+        MaxMultiplicationTimer = dat.MultiplicationTimer;
         MoveDistance = dat.MoveDistance;
         _hungerTimer = MaxHungerTimer;
         _lifelossTimer = MaxLifelossTimer;
+        _multiplicationTimer = MaxMultiplicationTimer;
         _health = MaxHealth;
         _fullness = MaxFullness;
         Size = dat.Size;
@@ -70,9 +74,11 @@ internal abstract class Animal : Entity
         FieldOfView = dat.FieldOfView;
         MaxHungerTimer = dat.HungerTimer;
         MaxLifelossTimer = dat.LifelossTimer;
+        MaxMultiplicationTimer = dat.MultiplicationTimer;
         MoveDistance = dat.MoveDistance;
         _hungerTimer = MaxHungerTimer;
         _lifelossTimer = MaxLifelossTimer;
+        _multiplicationTimer = MaxMultiplicationTimer;
         _health = health;
         _fullness = fullness;
         Size = dat.Size;
@@ -88,12 +94,10 @@ internal abstract class Animal : Entity
     /// <returns>If the animal is alive</returns>
     public bool Status()
     {
-        if (_hungerTimer == 0)
-            _hungerTimer = MaxHungerTimer;
-        else
-            _hungerTimer--;
-        if (_fullness == MaxFullness && _health < MaxHealth)
-            _health = Math.Min(MaxHealth, _health + 1);
+        _multiplicationTimer = (_multiplicationTimer == 0) ? MaxMultiplicationTimer : _multiplicationTimer - 1;    // can add (_fullness == MaxFullness && _health == MaxHealth)
+        _hungerTimer = (_hungerTimer == 0) ? MaxHungerTimer : _hungerTimer - 1;
+
+        if (_fullness == MaxFullness) _health = Math.Min(MaxHealth, _health + 1);
         if (_fullness == 0)
         {
             if (_lifelossTimer == 0)
@@ -162,6 +166,7 @@ internal abstract class Animal : Entity
     public virtual void Multiply(Game.Data data, List<(string id, (uint x, uint y))>? children)
     {
         if (children is null) return;
+        if (_multiplicationTimer != MaxMultiplicationTimer) return;
 
         Game.Direction[] partnerDirection = { Game.Direction.dNorth, Game.Direction.dSouth, Game.Direction.dEast, Game.Direction.dWest };
         partnerDirection = partnerDirection.GetShuffledCollections();

@@ -23,7 +23,8 @@ namespace Wolf_Island.Core.Entities.Service
     /// <param name="moveDistance">how far will it be able to move.</param>
     internal sealed class AnimalData(string id = "", uint maxHealth = 1, uint maxFullness = 1,
                                      uint meatValue = 1, uint fieldOfView = 1, Sizes size = Sizes.szMedium,
-                                     uint hungerTimer = 2, uint lifelossTimer = 2, uint moveDistance = 1) : IConfig
+                                     uint hungerTimer = 2, uint lifelossTimer = 2,
+                                     uint multiplicationTimer = 3, uint moveDistance = 1) : IConfig
     {
         public string Id { get; set; } = id;
         public uint MaxHealth { get; set; } = maxHealth;
@@ -33,6 +34,7 @@ namespace Wolf_Island.Core.Entities.Service
         public Sizes Size { get; set; } = size;
         public uint HungerTimer { get; set; } = hungerTimer;
         public uint LifelossTimer { get; set; } = lifelossTimer;
+        public uint MultiplicationTimer { get; set; } = multiplicationTimer;
         public uint MoveDistance { get; set; } = moveDistance;
     }
     internal sealed class AnimalsList

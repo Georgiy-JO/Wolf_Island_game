@@ -9,6 +9,7 @@
       "Size": "szMedium",
       "HungerTimer": 2,
       "LifelossTimer": 1,
+      "MultiplicationTimer": 3,
       "MoveDistance": 2
     },
     {
@@ -20,6 +21,7 @@
       "Size": "szSmall",
       "HungerTimer": 1,
       "LifelossTimer": 1,
+      "MultiplicationTimer": 2,
       "MoveDistance": 1
     }
   ]
