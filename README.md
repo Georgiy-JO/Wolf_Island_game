@@ -9,6 +9,7 @@ You can set the amount of each and the field size at the beginning of the game a
 - Project is written in a C# as a pet project. 
 - Some bags can still remain ([Notes](#notes-for-future)), I will fix those when I have time probably.
 - The project supports the MVC pattern so all the logic is inside the `Wolf_Island.Core` folder, while `Wolf_Island.App` folder contains GUI and a simple `Program.cs`.
+- Json files([Animals](/src/Wolf_Island.Core/DataLoader/Configs/animals.json), [Food](/src/Wolf_Island.Core/DataLoader/Configs/food.json)) allows to change game entities default parameters (be careful changing those).
 
 
 ## Notes for future
