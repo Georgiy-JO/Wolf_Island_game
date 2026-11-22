@@ -11,7 +11,7 @@ namespace Wolf_Island.Core.Entities.Service
         public EntityFactory(Dictionary<string, IConfig> registry)
         {
             _registry = registry;
-            //_types = GetTypes<Entity, IConfig>();   // can't be used because if constructor check in GetTypes
+            //_types = GetTypes<Entity, IConfig>();   // generalization can't be used because if constructor check in GetTypes
             _types = GetTypes<Food, FoodData>();
             var foodTypes = GetTypes<Animal, AnimalData>();
             foreach (var foodType in foodTypes)
@@ -33,7 +33,8 @@ namespace Wolf_Island.Core.Entities.Service
             {
                 var constructor = type.GetConstructor(new[] { typeof(TData), typeof((uint, uint)) });
 
-                //if (constructor is null)
+                // Can uncomment this to more careful control via the exception
+                //if (constructor is null)              
                 //    throw new InvalidOperationException(
                 //        $"{type.Name} must have constructor ({typeof(TData).Name}, (uint, uint))");
                 if (constructor is not null)
@@ -62,9 +63,9 @@ namespace Wolf_Island.Core.Entities.Service
 
         public Entity? Create(string id, (uint x, uint y) coords)
         {
-            if (!_types.ContainsKey(id)) return null; // can be rewritten to throw
+            if (!_types.ContainsKey(id)) return null; // can be re-written to throw
 
-            if (_types.TryGetValue(id, out Type? type) && typeof(Animal).IsAssignableFrom(type))        // type can't be null here
+            if (_types.TryGetValue(id, out Type? type) && typeof(Animal).IsAssignableFrom(type))
                 return CreateAnimal(id, coords);
             else if (type is not null && typeof(Food).IsAssignableFrom(type))
                 return CreateFood(id, coords, null, null);

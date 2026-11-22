@@ -23,7 +23,6 @@ internal abstract class Animal : Entity
 
     protected uint _health;
     protected uint _fullness;
-    //private (uint x, uint y) _coordinates;
     private uint _hungerTimer;
     private uint _lifelossTimer;
 
@@ -32,7 +31,6 @@ internal abstract class Animal : Entity
     public uint Fullness => _fullness;
     public bool IsFull => _fullness == MaxFullness;
     public bool IsHealthy => _health == MaxHealth;
-    //public (uint x, uint y) Coord => _coordinates;
 
     /// <summary>
     /// An Animal constructor.
@@ -129,7 +127,7 @@ internal abstract class Animal : Entity
         for (int i = 0; i < MoveDistance; i++)
         {
             ((long x, long y), int weight) theMove = (Coord, -(int)WeightField.weightDelta);       // issue#Movehandler_0: if the field size comes close to max int and FieldOfView comes close to global we are fucked
-            var possibleMoves = Enum.GetValues<Game.Direction>().Select(dir => Game.GetCoordsAround(dir, Coord)).ToArray().GetShuffledCollections();
+            var possibleMoves = Enum.GetValues<Game.Direction>().Select(dir => Game.GetCoords(dir, Coord)).ToArray().GetShuffledCollections();
             foreach (var possibleMove in possibleMoves)
             {
                 if (theMove.weight < weightField[possibleMove] &&
@@ -160,5 +158,50 @@ internal abstract class Animal : Entity
             return true;
         }
         return false;
+    }
+    public virtual void Multiply(Game.Data data, List<(string id, (uint x, uint y))>? children)
+    {
+        if (children is null) return;
+
+        Game.Direction[] partnerDirection = { Game.Direction.dNorth, Game.Direction.dSouth, Game.Direction.dEast, Game.Direction.dWest };
+        partnerDirection = partnerDirection.GetShuffledCollections();
+        List<(long x, long y)> partnerCoord = partnerDirection.Select(x => Game.GetCoords(x, this.Coord)).ToList();
+        partnerCoord.Add(Coord);
+        ushort amount = 1;      //can be updated later so the animals will multiply differently based on there firtility
+
+        bool multiplicationPossible = false;
+        List<(long x, long y)?> emptySpace = new();
+        for (int i = 0; i < partnerCoord.Count; i++)
+        {
+
+            if (partnerCoord[i].y < 0 || partnerCoord[i].x < 0 || partnerCoord[i].y >= data.Height || partnerCoord[i].x >= data.Width) continue;
+            emptySpace.Add(partnerCoord[i]);
+
+            foreach (var an in data.Animals)
+            {
+                if (!multiplicationPossible && this.GetType().Name == an.GetType().Name && partnerCoord[i] == an.Coord && this != an)
+                    multiplicationPossible = true;
+                if (partnerCoord[i] == an.Coord && emptySpace.Count >= 1) emptySpace[emptySpace.Count - 1] = null;
+            }
+        }
+        if (multiplicationPossible)
+        {
+            for (int j = 0; j < emptySpace.Count; j++)
+            {
+                if (emptySpace[j] is null) continue;
+                for (int i = 0; emptySpace[j] != null && i < data.Food.Count; i++)
+                    if (data.Food[i].Coord == emptySpace[j]) emptySpace[j] = null;
+                for (int i = 0; emptySpace[j] != null && i < children.Count; i++)
+                    if (children[i].Item2 == emptySpace[j]) emptySpace[j] = null;
+            }
+            for (int j = 0; amount > 0 && j < emptySpace.Count; j++)
+            {
+                if (emptySpace[j] is not null)
+                {
+                    children.Add((this.GetType().Name, ((uint)emptySpace[j].Value.x, (uint)emptySpace[j].Value.y)));
+                    amount--;
+                }
+            }
+        }
     }
 }

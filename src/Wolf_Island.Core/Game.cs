@@ -47,8 +47,6 @@ public class Game
     {
         _data = new Data(fieldWidth, fieldHeight, new List<Animal>(), new List<Food>());
 
-        //var animalJson = settingJsonlocation + "animals.json";
-        //var foodJson = settingJsonlocation + "food.json";
         string animalJson = Path.Combine(settingJsonlocation, "animals.json");
         string foodJson = Path.Combine(settingJsonlocation, "food.json");
         if (!File.Exists(animalJson))
@@ -113,10 +111,10 @@ public class Game
         foreach (var animal in _data.Animals) Add(animal);
         foreach (var food in _data.Food) Add(food);
 
-        return new ListStyleGameSnapshot(_data.Width, _data.Height, registry);          //issue?
+        return new ListStyleGameSnapshot(_data.Width, _data.Height, registry);
     }
 
-    public static (long x, long y) GetCoordsAround(Direction direction, (uint x, uint y) curCoords)
+    public static (long x, long y) GetCoords(Direction direction, (uint x, uint y) curCoords)
     {
         long x = curCoords.x;
         long y = curCoords.y;
@@ -136,23 +134,32 @@ public class Game
     public void Tick()
     {
         if (_running is false) return;
+
         foreach (var anim in _data.Animals)
         {
             if (anim.IsAlive) anim.Update(_data);
         }
 
         List<(uint x, uint y)> newGrass = new List<(uint x, uint y)>();
-
         foreach (var grass in _data.Food)
         {
             grass.Update(_data, newGrass);
         }
-
         foreach (var ng in newGrass)
         {
             _data.Food.Add(_factory.CreateFood("Grass", ng, null, null, true));
         }
 
+        List<(string id, (uint x, uint y))> children = [];
+        foreach (var anim in _data.Animals)
+        {
+            if (anim.IsAlive) anim.Multiply(_data, children);
+        }
+        foreach (var ch in children)
+        {
+            _data.Animals.Add(_factory.CreateAnimal(ch.id, ch.Item2));
+
+        }
 
         _data.Animals.RemoveAll(a =>
         {
@@ -160,7 +167,6 @@ public class Game
             if (a.MeatValue != 0) _data.Food.Add(_factory.CreateFood("Remains", a.Coord, null, a.MeatValue, true));
             return true;
         });
-        //TODO: добавить рождение новых животных (if you feel lucky)
     }
     public void UpdateState()
     {
@@ -169,7 +175,13 @@ public class Game
         var now = DateTime.UtcNow;
         var delta = (now - _lastTime).TotalSeconds;
         int ticksAmount = (int)(delta / _tickInerval);
-        for (int i = 0; i < ticksAmount; i++) Tick();
+        for (int i = 0; i < ticksAmount; i++)
+        {
+            Tick();
+            // Debug instruments
+            //Console.WriteLine($"Tick made:{i + 1} of {ticksAmount};");
+            //Console.WriteLine($"Animals alive:{_data.Animals.Count}, Food exist:{_data.Food.Count}");
+        }
         _lastTime = _lastTime.AddSeconds(_tickInerval * ticksAmount);
     }
 
@@ -181,7 +193,7 @@ public class Game
         {
             for (uint i = 0; i < id.Value; i++)
             {
-                if (positions.Count == 0) break;          // can throw here if we are intereste in to allowing to fill the field complitely 
+                if (positions.Count == 0) break;          // can throw here if we are interested in allowing to fill the field complitely 
                 var entity = _factory.Create(id.Key, positions.Pop());
                 switch (entity)
                 {

@@ -58,7 +58,7 @@ internal sealed class TUIGameRender : IRender
     public void PrintGame()
 
     {
-        Console.SetCursorPosition(0, 0);
+        Console.SetCursorPosition(0, 0);        // Comment for debugging output
         int fullWidth = (_width + 2 < int.MaxValue) ? (int)_width + 2 : int.MaxValue;
         Console.WriteLine(new string('=', fullWidth));
 

@@ -30,6 +30,8 @@ namespace Wolf_Island.Core.Entities.Service
 
             List<(long x, long y)> enemies = new();
             List<(long x, long y)> food = new();
+            List<(long x, long y)> taken = new();
+
             for (long j = beginCoord.y; j <= endCoord.y; j++)
             {
                 for (long k = beginCoord.x; k <= endCoord.x; k++)
@@ -40,10 +42,15 @@ namespace Wolf_Island.Core.Entities.Service
                         weightField[(k, j)] = 0;
                         if (data.Food.Exists(x => x?.Coord == (k, j) && animal.CanEat(x)))
                             food.Add((k, j));
-                        if (data.Animals.Exists(x => x?.Coord == (k, j) && animal.CanEat(x)))
-                            food.Add((k, j));
-                        if (data.Animals.Exists(x => x?.Coord == (k, j) && x.CanEat(animal)))
-                            enemies.Add((k, j));
+                        foreach (var an in data.Animals)
+                        {
+                            if (an != null && an.Coord == (k, j))
+                            {
+                                if (animal.CanEat(an)) food.Add((k, j));
+                                else if (an.CanEat(animal)) enemies.Add((k, j));
+                                else taken.Add((k, j));
+                            }
+                        }
                     }
                 }
             }
@@ -76,6 +83,10 @@ namespace Wolf_Island.Core.Entities.Service
                         }
                     }
                 }
+            }
+            foreach (var tk in taken)
+            {
+                weightField[(tk.x, tk.y)] += pointNegativeWeight;
             }
 
             return weightField;

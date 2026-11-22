@@ -21,6 +21,7 @@ namespace Wolf_Island.App
                 uint frames = 1000;
                 while (true)
                 {
+                    //Console.WriteLine("Calling the game-------------------------------------");
                     gameUI.Render(game.GetObjectStyleGameSnapshot());
                     Thread.Sleep((int)frames);
                 }
@@ -43,8 +44,8 @@ namespace Wolf_Island.App
             {
                 Console.Write("Input field Height: ");
             } while (!uint.TryParse(Console.ReadLine(), out height));
-            //width = 20;  // default 
-            //height = 20; // default 
+            //width = 20;  // default for debugging
+            //height = 20; // default for debugging
 
             string configsPath = Path.Combine(AppContext.BaseDirectory, "Configs");
 
@@ -68,7 +69,7 @@ namespace Wolf_Island.App
                         Console.Write($"Input field {key} amount: ");
                     } while (!uint.TryParse(Console.ReadLine(), out value));
                     amounts[key] = value;
-                    //amounts[key] = 5;
+                    //amounts[key] = 5; // default for debugging
                 }
 
             }
